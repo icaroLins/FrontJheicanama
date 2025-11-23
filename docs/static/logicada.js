@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
             passWord: document.getElementById("contratante-senha").value
         };
 
-        fetch("http://localhost:8080/contratantes/register", {
+        fetch("https://jheicanama-production.up.railway.app/contratantes/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataNascimento: document.getElementById("candidato-nascimento").value
         };
 
-        fetch("http://localhost:8080/usuarios/register", {
+        fetch("https://jheicanama-production.up.railway.app/usuarios/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (modoContratante) {
             // Login contratante
-            fetch("http://localhost:8080/contratantes/login", {
+            fetch("https://jheicanama-production.up.railway.app/contratantes/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ identificador, senha })
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(err => console.error("Erro:", err));
         } else {
             // Login usuário
-            fetch("http://localhost:8080/usuarios/login", {
+            fetch("https://jheicanama-production.up.railway.app/usuarios/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ identificador, senha })
