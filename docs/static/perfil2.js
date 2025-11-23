@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1- API ---
 
-    const API_PERFIL_URL = 'http://localhost:8080/contratantes/me';
+    const API_PERFIL_URL = 'https://jheicanama-production.up.railway.app/contratantes/me';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Atualiza a foto se o URL for válido
         if (dados.fotoPerfilUrl && fotoUsuario) {
-            fotoUsuario.src = "http://localhost:8080" + dados.fotoPerfilUrl;
+            fotoUsuario.src = "https://jheicanama-production.up.railway.app" + dados.fotoPerfilUrl;
         } else {
             fotoUsuario.src = "https://via.placeholder.com/150";
         }
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append("foto", file);
 
             try {
-                const resposta = await fetch("http://localhost:8080/contratantes/upload_foto", {
+                const resposta = await fetch("https://jheicanama-production.up.railway.app/contratantes/upload_foto", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${token}`

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCandidatar.disabled = true;
         btnCandidatar.textContent = 'Enviando...';
 
-        fetch(`http://localhost:8080/vagas/${idVaga}/candidatar`, { // Endpoint SUGERIDO: POST
+        fetch(`https://jheicanama-production.up.railway.app/vagas/${idVaga}/candidatar`, { // Endpoint SUGERIDO: POST
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`, // Envia o token
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let vagasRecusadas = [];
 
         try {
-            const response = await fetch('http://localhost:8080/vaga/listar',{
+            const response = await fetch('https://jheicanama-production.up.railway.app/vaga/listar',{
                 method: "get",
                 headers:{
                     'Authorization': `Bearer ${token}`, // Envia o token

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('http://localhost:8080/vaga/criar', {
+            const response = await fetch('https://jheicanama-production.up.railway.app/vaga/criar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

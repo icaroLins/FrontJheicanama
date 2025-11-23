@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = `http://localhost:8080/api/password/reset?token=${encodeURIComponent(token)}&newPassword=${encodeURIComponent(newPassword)}`;
+            const url = `https://jheicanama-production.up.railway.app/api/password/reset?token=${encodeURIComponent(token)}&newPassword=${encodeURIComponent(newPassword)}`;
             const response = await fetch(url, { method: 'POST' });
 
             if (response.ok) {

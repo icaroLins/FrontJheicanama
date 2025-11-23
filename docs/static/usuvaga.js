@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const listaAceitas = document.getElementById('lista-aceitas');
         const listaRecusadas = document.getElementById('lista-recusadas');
 
-        const API_VAGAS_CANDIDATO = `http://localhost:8080/vagas/${Number(candidatoId)}/candidature`;
+        const API_VAGAS_CANDIDATO = `https://jheicanama-production.up.railway.app/vagas/${Number(candidatoId)}/candidature`;
         // ajuste conforme sua rota backend
 
         if (!listaEspera || !listaAceitas || !listaRecusadas) {

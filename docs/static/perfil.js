@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. API (Configuração) ---
     
     // API.
-    const API_PERFIL_URL = 'http://localhost:8080/usuarios/me'; 
+    const API_PERFIL_URL = 'https://jheicanama-production.up.railway.app/usuarios/me'; 
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Atualiza a foto se o URL for válido
         if (dados.fotoPerfilUrl && fotoUsuario) {
-            fotoUsuario.src = "http://localhost:8080" + dados.fotoPerfilUrl;
+            fotoUsuario.src = "https://jheicanama-production.up.railway.app" + dados.fotoPerfilUrl;
         } else {
             fotoUsuario.src = "https://via.placeholder.com/150";
         }
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append("foto", file);
 
             try {
-                const resposta = await fetch("http://localhost:8080/usuarios/upload_foto", {
+                const resposta = await fetch("https://jheicanama-production.up.railway.app/usuarios/upload_foto", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${token}`
