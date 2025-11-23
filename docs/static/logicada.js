@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("tipo", data.tipo);
-                        window.location.href = "http://127.0.0.1:5500/pagina-login/cadastro/src/main/resources/static/central.html";
+                        window.location.href = "/central.html";
                     } else {
                         const msg = await res.text();
                         alert("Erro no login contratante: " + msg);
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         localStorage.setItem("userId", resJson.id);
                         alert("Login usuário realizado com sucesso!");
                         console.log("Token:", resJson.token);
-                         window.location.href = "http://127.0.0.1:5500/pagina-login/cadastro/src/main/resources/static/perfil.html";
+                         window.location.href = "/perfil.html";
 
                     } else {
                         const msg = await res.text();

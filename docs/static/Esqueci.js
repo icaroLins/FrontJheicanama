@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = `http://localhost:8080/api/password/forgot?email=${encodeURIComponent(email)}`;
+            const url = `https://jheicanama-production.up.railway.app/api/password/forgot?email=${encodeURIComponent(email)}`;
             const response = await fetch(url, {
                 method: 'POST'
             });
