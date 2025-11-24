@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("tipo", data.tipo);
-                        window.location.href = "/central.html";
+                        window.location.href = "https://icarolins.github.io/FrontJheicanama/docs/static/central.html";
                     } else {
                         const msg = await res.text();
                         alert("Erro no login contratante: " + msg);
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         localStorage.setItem("userId", resJson.id);
                         alert("Login usuário realizado com sucesso!");
                         console.log("Token:", resJson.token);
-                         window.location.href = "/perfil.html";
+                         window.location.href = "https://icarolins.github.io/FrontJheicanama/docs/static/perfil.html";
 
                     } else {
                         const msg = await res.text();
