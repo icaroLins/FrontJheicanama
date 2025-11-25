@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageBox.style.color = "green";
                 form.reset();
             } else {
-                // O backend pode não retornar JSON, então não fazemos parse
-                messageBox.textContent = "Erro ao enviar e-mail.";
+                const text = await response.text();
+                messageBox.textContent = `Erro ao enviar e-mail: ${response.status} ${text || ''}`;
                 messageBox.style.color = "red";
             }
         } catch (error) {
