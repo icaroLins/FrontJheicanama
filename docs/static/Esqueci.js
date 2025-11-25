@@ -37,8 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const url = `https://jheicanama-production.up.railway.app/api/password/forgot?email=${encodeURIComponent(email)}`;
+            console.log('Solicitando:', url);
             const response = await fetch(url, {
-                method: 'POST'
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
