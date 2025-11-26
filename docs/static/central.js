@@ -156,6 +156,53 @@ document.addEventListener('DOMContentLoaded', () => {
         painelElement.appendChild(listaCandidatosGrid);
     }
 
+    function handleFinalizar(vagaId, cardElement) {
+        const confirmPanel = document.createElement('div');
+        confirmPanel.classList.add('confirmacao-finalizar');
+        confirmPanel.innerHTML = `
+            <p>Deseja realmente apagar ou finalizar esta vaga? Essa ação é permanente.</p>
+            <div class="botoes-confirmacao">
+                <button class="btn-cancelar">Cancelar</button>
+                <button class="btn-confirma">Confirmar</button>
+            </div>
+        `;
+
+        cardElement.appendChild(confirmPanel);
+
+        confirmPanel.querySelector('.btn-cancelar').addEventListener('click', () => {
+            confirmPanel.remove();
+        });
+
+        confirmPanel.querySelector('.btn-confirma').addEventListener('click', async () => {
+            confirmPanel.innerHTML = '<p>Finalizando...</p>';
+
+            try {
+                const API_DELETE_VAGA = `https://jheicanama-production.up.railway.app/vaga/${vagaId}/deletar`;
+
+                const response = await fetch(API_DELETE_VAGA, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Envia o token
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao finalizar vaga: ${response.status}`);
+                }
+
+                // Remove o card da vaga da interface após o sucesso
+                cardElement.closest('.card-container').remove();
+                alert(`Vaga ID ${vagaId} finalizada e removida com sucesso!`);
+
+            } catch (error) {
+                console.error('Falha ao finalizar vaga:', error);
+                confirmPanel.innerHTML = `<p class="mensagem-erro">Erro: ${error.message}</p>`;
+                setTimeout(() => confirmPanel.remove(), 3000);
+            }
+        });
+    }
+
     async function handleInformacoes(vagaId, cardElement) {
         const cardContainer = cardElement.closest('.card-container');
         const painelId = `candidatos-vaga-${vagaId}`;
@@ -283,53 +330,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Erro ao atualizar vaga: ' + error.message);
             }
         };
-    }
-
-    function handleFinalizar(vagaId, cardElement) {
-        const confirmPanel = document.createElement('div');
-        confirmPanel.classList.add('confirmacao-finalizar');
-        confirmPanel.innerHTML = `
-            <p>Deseja realmente apagar ou finalizar esta vaga? Essa ação é permanente.</p>
-            <div class="botoes-confirmacao">
-                <button class="btn-cancelar">Cancelar</button>
-                <button class="btn-confirma">Confirmar</button>
-            </div>
-        `;
-
-        cardElement.appendChild(confirmPanel);
-
-        confirmPanel.querySelector('.btn-cancelar').addEventListener('click', () => {
-            confirmPanel.remove();
-        });
-
-        confirmPanel.querySelector('.btn-confirma').addEventListener('click', async () => {
-            confirmPanel.innerHTML = '<p>Finalizando...</p>';
-
-            try {
-                const API_DELETE_VAGA = `https://jheicanama-production.up.railway.app/vaga/${vagaId}/deletar`;
-
-                const response = await fetch(API_DELETE_VAGA, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`, // Envia o token
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erro ao finalizar vaga: ${response.status}`);
-                }
-
-                // Remove o card da vaga da interface após o sucesso
-                cardElement.closest('.card-container').remove();
-                alert(`Vaga ID ${vagaId} finalizada e removida com sucesso!`);
-
-            } catch (error) {
-                console.error('Falha ao finalizar vaga:', error);
-                confirmPanel.innerHTML = `<p class="mensagem-erro">Erro: ${error.message}</p>`;
-                setTimeout(() => confirmPanel.remove(), 3000);
-            }
-        });
     }
 
 
