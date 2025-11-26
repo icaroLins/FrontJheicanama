@@ -383,6 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 handleFinalizar(vagaId, cardContent);
             });
+        }else{
+            alert('Erro ao atualizar vaga: ' + error.message);
         }
 
         return cardContent;
