@@ -217,6 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const titulo = tituloElem ? tituloElem.textContent : '';
         const area = areaElem ? areaElem.textContent.replace('Área: ','') : '';
         const remuneracao = remunElem ? remunElem.textContent.replace('Remuneração: ',''):""
+        const overlay = document.createElement('div');
+        overlay.classList.add('confirmacao-overlay');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:1000;';
         const confirmPanel = document.createElement('div');
         confirmPanel.classList.add('confirmacao-finalizar');
         confirmPanel.innerHTML = '';
@@ -233,10 +236,11 @@ document.addEventListener('DOMContentLoaded', () => {
         divBotoes.append(btnCancelar, btnConfirma);
         confirmPanel.append(pMsg, divBotoes);
 
-        cardElement.appendChild(confirmPanel);
+        overlay.appendChild(confirmPanel);
+        document.body.appendChild(overlay);
 
         confirmPanel.querySelector('.btn-cancelar').addEventListener('click', () => {
-            confirmPanel.remove();
+            overlay.remove();
         });
 
         confirmPanel.querySelector('.btn-confirma').addEventListener('click', async () => {
@@ -260,11 +264,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Remove o card da vaga da interface após o sucesso
                 cardElement.closest('.card-container').remove();
                 alert(`Vaga ID ${vagaId} finalizada e removida com sucesso!`);
+                overlay.remove();
 
             } catch (error) {
                 console.error('Falha ao finalizar vaga:', error);
                 confirmPanel.innerHTML = `<p class="mensagem-erro">Erro: ${error.message}</p>`;
-                setTimeout(() => confirmPanel.remove(), 3000);
+                setTimeout(() => overlay.remove(), 3000);
             }
         });
     }
@@ -289,8 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="botoes-acao-contratante">
                 <button class="btn-acao btn-info">Informações</button>
-                <button class="btn-acao btn-editar">Editar</button>
-                <button class="btn-acao btn-finalizar">Finalizar</button>
+                <button id="btn-editar-${vaga.id}" class="btn-acao btn-editar">Editar</button>
+                <button id="btn-finalizar-${vaga.id}" class="btn-acao btn-finalizar">Finalizar</button>
             </div>
             `;
 
@@ -301,15 +306,20 @@ document.addEventListener('DOMContentLoaded', () => {
             handleInformacoes(vagaId, cardContent);
         });
 
-        cardContent.querySelector('.btn-editar').addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleEditar(vagaId, cardContent);
-        });
-
-        cardContent.querySelector('.btn-finalizar').addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleFinalizar(vagaId, cardContent);
-        });
+        const btnEditar = document.getElementById(`btn-editar-${vagaId}`);
+        const btnFinalizar = document.getElementById(`btn-finalizar-${vagaId}`);
+        if (btnEditar) {
+            btnEditar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleEditar(vagaId, cardContent);
+            });
+        }
+        if (btnFinalizar) {
+            btnFinalizar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleFinalizar(vagaId, cardContent);
+            });
+        }
 
         return cardContent;
     }
