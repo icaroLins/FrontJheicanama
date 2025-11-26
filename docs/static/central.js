@@ -262,6 +262,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function handleEditar(vagaId, cardContent) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:2000;';
+
+        const painel = document.createElement('div');
+        painel.classList.add('painel-edicao');
+        painel.innerHTML = `
+        <h3>Editar vaga ${vagaId}</h3>
+        <label>Título:</label>
+        <input type="text" id="edit-titulo" value="${cardContent.querySelector('h3').textContent}">
+        
+        <label>Descrição:</label>
+        <textarea id="edit-descricao">${cardContent.querySelector('.descricao-curta').textContent}</textarea>
+
+        <div class="botoes-edicao">
+            <button id="btn-salvar-edicao">Salvar</button>
+            <button id="btn-cancelar-edicao">Cancelar</button>
+        </div>
+    `;
+
+        overlay.appendChild(painel);
+        document.body.appendChild(overlay);
+
+        document.getElementById('btn-cancelar-edicao').onclick = () => overlay.remove();
+
+        document.getElementById('btn-salvar-edicao').onclick = async () => {
+            const novoTitulo = document.getElementById('edit-titulo').value.trim();
+            const novaDescricao = document.getElementById('edit-descricao').value.trim();
+
+            try {
+                const response = await fetch(`https://jheicanama-production.up.railway.app/vaga/${vagaId}/editar`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: novoTitulo,
+                        description: novaDescricao
+                    })
+                });
+
+                if (!response.ok) throw new Error(response.status);
+
+                alert('Vaga atualizada com sucesso!');
+                overlay.remove();
+                location.reload();
+
+            } catch (error) {
+                alert('Erro ao atualizar vaga: ' + error.message);
+            }
+        };
+    }
+
+
     function criarCardVaga(vaga) {
         const cardContent = document.createElement('div');
         cardContent.classList.add('card-vaga');
