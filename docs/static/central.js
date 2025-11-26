@@ -213,68 +213,33 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Exibe um painel de confirmação antes de apagar a vaga.
      */
-    function handleFinalizar(vagaId, cardElement) {
-        const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:1000;';
-        const confirmPanel = document.createElement('div');
-        confirmPanel.classList.add('confirmacao-finalizar');
-        confirmPanel.innerHTML = `
-            <p>Deseja realmente apagar ou finalizar esta vaga? Essa ação é permanente.</p>
-            <div class="botoes-confirmacao">
-                <button class="btn-cancelar">Cancelar</button>
-                <button class="btn-confirma">Confirmar</button>
-            </div>
-        `;
-        overlay.appendChild(confirmPanel);
-        document.body.appendChild(overlay);
-
-        confirmPanel.querySelector('.btn-cancelar').addEventListener('click', () => {
-            overlay.remove();
-        });
-
-        confirmPanel.querySelector('.btn-confirma').addEventListener('click', async () => {
-            confirmPanel.innerHTML = '<p>Finalizando...</p>';
-
-            try {
-                const API_DELETE_VAGA = `https://jheicanama-production.up.railway.app/vaga/${vagaId}/deletar`;
-
-                const response = await fetch(API_DELETE_VAGA, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`, // Envia o token
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erro ao finalizar vaga: ${response.status}`);
-                }
-
-                // Remove o card da vaga da interface após o sucesso
-                cardElement.closest('.card-container').remove();
-                alert(`Vaga ID ${vagaId} finalizada e removida com sucesso!`);
-
-            } catch (error) {
-                console.error('Falha ao finalizar vaga:', error);
-                confirmPanel.innerHTML = `<p class="mensagem-erro">Erro: ${error.message}</p>`;
-                setTimeout(() => confirmPanel.remove(), 3000);
-            }
-        });
-    }
-
     function handleEditar(vagaId, cardContent) {
         const overlay = document.createElement('div');
         overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:2000;';
 
         const painel = document.createElement('div');
         painel.classList.add('painel-edicao');
+
+        const tituloAtual = cardContent.querySelector('h3').textContent;
+        const descricaoAtual = cardContent.querySelector('.descricao-curta').textContent;
+        const areaAtual = cardContent.querySelector('.area-vaga').textContent.replace("Área: ", "");
+        const salarioTexto = cardContent.querySelector('.remuneracao-vaga strong').textContent;
+        const salarioAtual = salarioTexto.replace(/[R$.\s]/g, '').replace(',', '.'); // limpa para número
+
         painel.innerHTML = `
         <h3>Editar vaga ${vagaId}</h3>
+
         <label>Título:</label>
-        <input type="text" id="edit-titulo" value="${cardContent.querySelector('h3').textContent}">
-        
+        <input type="text" id="edit-titulo" value="${tituloAtual}">
+
+        <label>Área:</label>
+        <input type="text" id="edit-area" value="${areaAtual}">
+
+        <label>Salário (R$):</label>
+        <input type="number" id="edit-salario" value="${salarioAtual}" step="0.01">
+
         <label>Descrição:</label>
-        <textarea id="edit-descricao">${cardContent.querySelector('.descricao-curta').textContent}</textarea>
+        <textarea id="edit-descricao">${descricaoAtual}</textarea>
 
         <div class="botoes-edicao">
             <button id="btn-salvar-edicao">Salvar</button>
@@ -290,9 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btn-salvar-edicao').onclick = async () => {
             const novoTitulo = document.getElementById('edit-titulo').value.trim();
             const novaDescricao = document.getElementById('edit-descricao').value.trim();
+            const novaArea = document.getElementById('edit-area').value.trim();
+            const novoSalario = parseFloat(document.getElementById('edit-salario').value);
 
             try {
-                const response = await fetch(`https://jheicanama-production.up.railway.app/vaga/${vagaId}/editar`, {
+                const response = await fetch(`https://jheicanama-production.up.railway.app/vaga/${vagaId}/edid`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -300,7 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         title: novoTitulo,
-                        description: novaDescricao
+                        description: novaDescricao,
+                        area: novaArea,
+                        wage: novoSalario
                     })
                 });
 
