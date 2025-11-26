@@ -219,13 +219,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const remuneracao = remunElem ? remunElem.textContent.replace('Remuneração: ',''):""
         const confirmPanel = document.createElement('div');
         confirmPanel.classList.add('confirmacao-finalizar');
-        confirmPanel.innerHTML = `
-            <p>Deseja realmente apagar ou finalizar esta vaga? Essa ação é permanente.</p>
-            <div class="botoes-confirmacao">
-                <button class="btn-cancelar">Cancelar</button>
-                <button class="btn-confirma">Confirmar</button>
-            </div>
-        `;
+        confirmPanel.innerHTML = '';
+        const pMsg = document.createElement('p');
+        pMsg.textContent = 'Deseja realmente apagar ou finalizar esta vaga? Essa ação é permanente.';
+        const divBotoes = document.createElement('div');
+        divBotoes.className = 'botoes-confirmacao';
+        const btnCancelar = document.createElement('button');
+        btnCancelar.className = 'btn-cancelar';
+        btnCancelar.textContent = 'Cancelar';
+        const btnConfirma = document.createElement('button');
+        btnConfirma.className = 'btn-confirma';
+        btnConfirma.textContent = 'Confirmar';
+        divBotoes.append(btnCancelar, btnConfirma);
+        confirmPanel.append(pMsg, divBotoes);
 
         cardElement.appendChild(confirmPanel);
 
