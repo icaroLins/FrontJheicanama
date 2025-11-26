@@ -214,6 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
      * Exibe um painel de confirmação antes de apagar a vaga.
      */
     function handleFinalizar(vagaId, cardElement) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:1000;';
         const confirmPanel = document.createElement('div');
         confirmPanel.classList.add('confirmacao-finalizar');
         confirmPanel.innerHTML = `
@@ -223,11 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="btn-confirma">Confirmar</button>
             </div>
         `;
-
-        cardElement.appendChild(confirmPanel);
+        overlay.appendChild(confirmPanel);
+        document.body.appendChild(overlay);
 
         confirmPanel.querySelector('.btn-cancelar').addEventListener('click', () => {
-            confirmPanel.remove();
+            overlay.remove();
         });
 
         confirmPanel.querySelector('.btn-confirma').addEventListener('click', async () => {
@@ -292,15 +294,25 @@ document.addEventListener('DOMContentLoaded', () => {
             handleInformacoes(vagaId, cardContent);
         });
 
-        cardContent.querySelector('.btn-editar').addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleEditar(vagaId, cardContent);
-        });
+        const btnEditar = cardContent.querySelector('.btn-editar');
+        if (btnEditar) {
+            btnEditar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (typeof handleEditar === 'function') {
+                    handleEditar(vagaId, cardContent);
+                } else {
+                    alert('Função de edição indisponível. Atualize a página.');
+                }
+            });
+        }
 
-        cardContent.querySelector('.btn-finalizar').addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleFinalizar(vagaId, cardContent);
-        });
+        const btnFinalizar = cardContent.querySelector('.btn-finalizar');
+        if (btnFinalizar) {
+            btnFinalizar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleFinalizar(vagaId, cardContent);
+            });
+        }
 
         return cardContent;
     }
