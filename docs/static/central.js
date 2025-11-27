@@ -397,15 +397,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('https://jheicanama-production.up.railway.app/vaga/minhas', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Envia o token
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
-            const vagas = await response.json();
+            const contentType = response.headers.get('content-type') || '';
+            let vagas;
+            if (contentType.includes('application/json')) {
+                vagas = await response.json();
+            } else {
+                const text = await response.text();
+                try {
+                    vagas = JSON.parse(text);
+                } catch (e) {
+                    console.error('Resposta não-JSON da API (primeiros 300 chars):', text.slice(0, 300));
+                    throw new Error('Resposta da API não é JSON válido');
+                }
+            }
 
             if (vagas.length === 0) {
                 listaVagasElement.innerHTML = '<p class="mensagem-alerta">Nenhuma vaga disponível no momento.</p>';
